@@ -14,6 +14,17 @@ const getAllBooks = catchAsync(async (req, res) => {
   });
 });
 
+const getBookByCategory = catchAsync(async (req, res) => {
+  const books = await BookService.getBookByCategory(req.params.categoryId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book retrieved successfully!',
+    data: books,
+  });
+});
+
 const createBook = catchAsync(async (req, res) => {
   const book = await BookService.createBook(req.body);
 
@@ -24,7 +35,21 @@ const createBook = catchAsync(async (req, res) => {
     data: book,
   });
 });
+
+const getSingleBook = catchAsync(async (req, res) => {
+  const book = await BookService.getSingleBook(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book retrieved successfully!',
+    data: book,
+  });
+});
+
 export const BookController = {
   getAllBooks,
   createBook,
+  getBookByCategory,
+  getSingleBook,
 };

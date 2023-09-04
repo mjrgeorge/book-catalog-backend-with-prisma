@@ -1,5 +1,7 @@
 import { Book, Prisma } from '@prisma/client';
 import { Request } from 'express';
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
 import prisma from '../../../shared/prisma';
 import { bookSearchableFields } from './book.constants';
 
@@ -108,7 +110,40 @@ const getAllBooks = async (req: Request): Promise<IBooksWithMeta> => {
   };
 };
 
+const getBookByCategory = async (categoryId: string): Promise<Book[]> => {
+  const books = await prisma.book.findMany({
+    where: {
+      categoryId,
+    },
+    include: {
+      category: true,
+      reviewAndRatings: true,
+    },
+  });
+  return books;
+};
+
+const getSingleBook = async (id: string): Promise<Book | null> => {
+  const book = await prisma.book.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      category: true,
+      reviewAndRatings: true,
+    },
+  });
+
+  if (!book) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found');
+  }
+
+  return book;
+};
+
 export const BookService = {
   createBook,
   getAllBooks,
+  getBookByCategory,
+  getSingleBook,
 };
