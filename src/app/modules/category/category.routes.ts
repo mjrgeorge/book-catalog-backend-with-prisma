@@ -19,6 +19,11 @@ router.get('/', CategoryController.getAllCategories);
 router
   .route('/:id')
   .get(CategoryController.getSingleCategory)
+  .patch(
+    validateRequest(CategoryValidation.createOrUpdateCategoryZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN),
+    CategoryController.updateCategory
+  )
   .delete(
     validateRequest(CategoryValidation.deleteCategoryZodSchema),
     auth(ENUM_USER_ROLE.ADMIN),
