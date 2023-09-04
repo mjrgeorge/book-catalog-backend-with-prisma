@@ -14,11 +14,22 @@ router.get(
   UserController.getAllUsers
 );
 
-router.patch(
-  '/:id',
-  validateRequest(UserValidation.updateUserZodSchema),
-  auth(ENUM_USER_ROLE.ADMIN),
-  UserController.updateUser
-);
+router
+  .route('/:id')
+  .get(
+    validateRequest(UserValidation.getOrDeleteUserZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.CUSTOMER),
+    UserController.getUserById
+  )
+  .patch(
+    validateRequest(UserValidation.getOrDeleteUserZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN),
+    UserController.updateUser
+  )
+  .delete(
+    validateRequest(UserValidation.getOrDeleteUserZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN),
+    UserController.deleteUser
+  );
 
 export const UserRoutes = router;

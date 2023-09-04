@@ -28,7 +28,19 @@ const updateUserZodSchema = z.object({
   }),
 });
 
+const getOrDeleteUserZodSchema = z.object({
+  headers: z.object({
+    authorization: z.string().nonempty({
+      message: 'Authorization is required',
+    }),
+  }),
+  params: z.object({
+    id: z.string(),
+  }),
+});
+
 export const UserValidation = {
   getAllUsersZodSchema,
   updateUserZodSchema,
+  getOrDeleteUserZodSchema,
 };

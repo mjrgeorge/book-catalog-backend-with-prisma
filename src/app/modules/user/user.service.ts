@@ -1,11 +1,25 @@
 import { User } from '@prisma/client';
-import prisma from '../../../shared/prisma';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
+import prisma from '../../../shared/prisma';
 
 const getAllUsers = async (): Promise<Array<User>> => {
   const users = await prisma.user.findMany();
   return users;
+};
+
+const getUserById = async (id: string): Promise<User | null> => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  return user;
 };
 
 const updateUser = async (
@@ -32,7 +46,29 @@ const updateUser = async (
   return updatedUser;
 };
 
+const deleteUser = async (id: string): Promise<User | null> => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  const deletedUser = await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+
+  return deletedUser;
+};
+
 export const UserService = {
   getAllUsers,
+  getUserById,
   updateUser,
+  deleteUser,
 };

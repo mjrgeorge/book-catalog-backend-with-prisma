@@ -13,6 +13,16 @@ const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
+const getUserById = catchAsync(async (req, res) => {
+  const user = await UserService.getUserById(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    data: user,
+    message: 'User retrieved successfully!',
+  });
+});
 const updateUser = catchAsync(async (req, res) => {
   const {
     body,
@@ -28,7 +38,19 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
+const deleteUser = catchAsync(async (req, res) => {
+  const user = await UserService.deleteUser(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    data: user,
+    message: 'User deleted successfully!',
+  });
+});
 export const UserController = {
   getAllUsers,
+  getUserById,
   updateUser,
+  deleteUser,
 };
