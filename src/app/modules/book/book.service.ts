@@ -141,9 +141,55 @@ const getSingleBook = async (id: string): Promise<Book | null> => {
   return book;
 };
 
+const updateBook = async (
+  id: string,
+  payload: Partial<Book>
+): Promise<Book | null> => {
+  const book = await prisma.book.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!book) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found');
+  }
+
+  const updatedBook = await prisma.book.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+
+  return updatedBook;
+};
+
+const deleteBook = async (id: string): Promise<Book | null> => {
+  const book = await prisma.book.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!book) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book not found');
+  }
+
+  const deletedBook = await prisma.book.delete({
+    where: {
+      id,
+    },
+  });
+
+  return deletedBook;
+};
+
 export const BookService = {
   createBook,
   getAllBooks,
   getBookByCategory,
   getSingleBook,
+  updateBook,
+  deleteBook,
 };

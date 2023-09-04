@@ -16,7 +16,19 @@ router.post(
   BookController.createBook
 );
 
-router.route('/:id').get(BookController.getSingleBook);
+router
+  .route('/:id')
+  .get(BookController.getSingleBook)
+  .patch(
+    validateRequest(BookValidation.updateCategoryZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN),
+    BookController.updateBook
+  )
+  .delete(
+    validateRequest(BookValidation.deleteBookZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN),
+    BookController.deleteBook
+  );
 
 router.get('/:categoryId/category', BookController.getBookByCategory);
 

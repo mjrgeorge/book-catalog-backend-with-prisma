@@ -23,6 +23,31 @@ const createBookZodSchema = z.object({
   }),
 });
 
+const updateCategoryZodSchema = z.object({
+  headers: z.object({
+    authorization: z.string().nonempty({
+      message: 'Authorization is required',
+    }),
+  }),
+  body: z.object({
+    title: z.string().optional(),
+    author: z.string().optional(),
+    price: z.number().optional(),
+    publicationDate: z.string().optional(),
+    categoryId: z.string().nonempty().optional(),
+  }),
+});
+
+const deleteBookZodSchema = z.object({
+  headers: z.object({
+    authorization: z.string().nonempty({
+      message: 'Authorization is required',
+    }),
+  }),
+});
+
 export const BookValidation = {
   createBookZodSchema,
+  updateCategoryZodSchema,
+  deleteBookZodSchema,
 };
