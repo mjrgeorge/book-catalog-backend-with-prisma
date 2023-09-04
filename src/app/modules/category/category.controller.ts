@@ -25,7 +25,31 @@ const getAllCategories = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleCategory = catchAsync(async (req, res) => {
+  const category = await CategoryService.getSingleCategory(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Category retrieved successfully!',
+    data: category,
+  });
+});
+
+const deleteCategory = catchAsync(async (req, res) => {
+  const category = await CategoryService.deleteCategory(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Category deleted successfully!',
+    data: category,
+  });
+});
+
 export const CategoryController = {
   createCategory,
   getAllCategories,
+  getSingleCategory,
+  deleteCategory,
 };

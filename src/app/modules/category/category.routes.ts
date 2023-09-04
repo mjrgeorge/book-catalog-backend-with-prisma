@@ -16,4 +16,13 @@ router.post(
 
 router.get('/', CategoryController.getAllCategories);
 
+router
+  .route('/:id')
+  .get(CategoryController.getSingleCategory)
+  .delete(
+    validateRequest(CategoryValidation.deleteCategoryZodSchema),
+    auth(ENUM_USER_ROLE.ADMIN),
+    CategoryController.deleteCategory
+  );
+
 export const CategoryRoutes = router;

@@ -13,6 +13,15 @@ const createOrUpdateCategoryZodSchema = z.object({
   }),
 });
 
+const deleteCategoryZodSchema = z.object({
+  headers: z.object({
+    authorization: z.string().nonempty({
+      message: 'Authorization is required',
+    }),
+  }),
+});
+
 export const CategoryValidation = {
   createOrUpdateCategoryZodSchema,
+  deleteCategoryZodSchema,
 };
