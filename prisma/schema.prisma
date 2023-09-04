@@ -16,7 +16,7 @@ model User {
   email            String            @unique
   password         String
   role             USER_ROLE_ENUM
-  constactNo       String
+  contactNo       String
   address          String
   profileImg       String
   reviewAndRatings ReviewAndRating[]
@@ -75,18 +75,18 @@ model Order {
   id          String            @id @default(uuid())
   userId      String
   user        User              @relation(fields: [userId], references: [id])
-  status      ORDER_STATUS_ENUM @default(PENDING)
+  status      ORDER_STATUS_ENUM @default(pending)
   createdAt   DateTime          @default(now())
   OrderedBook OrderedBook[]
 }
 
 enum USER_ROLE_ENUM {
-  ADMIN
-  CUSTOMER
+  admin
+  customer
 }
 
 enum ORDER_STATUS_ENUM {
-  PENDING
-  SHIPPED
-  DELIVERED
+  pending
+  shipped
+  delivered
 }
