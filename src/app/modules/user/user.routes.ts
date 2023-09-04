@@ -14,4 +14,11 @@ router.get(
   UserController.getAllUsers
 );
 
+router.patch(
+  '/:id',
+  validateRequest(UserValidation.updateUserZodSchema),
+  auth(ENUM_USER_ROLE.ADMIN),
+  UserController.updateUser
+);
+
 export const UserRoutes = router;
