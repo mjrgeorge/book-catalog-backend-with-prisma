@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(uuid())
+  name             String
+  email            String            @unique
+  password         String
+  role             USER_ROLE_ENUM
+  constactNo       String
+  address          String
+  profileImg       String
+  reviewAndRatings ReviewAndRating[]
+  Order            Order[]
+
+  @@map("users")
+}
+
+model Category {
+  id    String @id @default(uuid())
+  title String @unique
+  books Book[]
+
+  @@map("categories")
+}
+
+model Book {
+  id               String            @id @default(uuid())
+  title            String
+  author           String
+  price            Float
+  genre            String
+  publicationDate  DateTime
+  categoryId       String
+  category         Category          @relation(fields: [categoryId], references: [id])
+  reviewAndRatings ReviewAndRating[]
+  OrderedBook      OrderedBook[]
+
+  @@map("books")
+}
+
+model ReviewAndRating {
+  id     String @id @default(uuid())
+  review String
+  rating Int
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  bookId String
+  book   Book   @relation(fields: [bookId], references: [id])
+
+  @@map("ordered_books")
+}
+
+model OrderedBook {
+  id       String @id @default(uuid())
+  bookId   String
+  book     Book   @relation(fields: [bookId], references: [id])
+  quantity Int
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id])
+
+  @@map("ordered_book")
+}
+
+model Order {
+  id          String            @id @default(uuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+  status      ORDER_STATUS_ENUM @default(PENDING)
+  createdAt   DateTime          @default(now())
+  OrderedBook OrderedBook[]
+}
+
+enum USER_ROLE_ENUM {
+  ADMIN
+  CUSTOMER
+}
+
+enum ORDER_STATUS_ENUM {
+  PENDING
+  SHIPPED
+  DELIVERED
+}
